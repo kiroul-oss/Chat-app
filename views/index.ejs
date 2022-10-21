@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Chat-app</title>
+  <style>
+    *{margin:0;padding: 0;box-sizing: border-box;}
+    body{ font: 13px Helvetica,arial;}
+    form{background: #000; padding: 3px;position: fixed;bottom: 0; width: 100%;}
+    form input{ border: 0;padding: 10px; width: 90%;margin-right: .5%;}
+    form button{width: 9%; background: rgb(32, 135, 25);border: none;padding: 10px;}
+    #message{list-style-type: none; margin:0;padding: 0;}
+    #message li{padding: 5px 10px;}
+    #message li:nth-child(odd){background: #eee;}
+
+  </style>
+</head>
+<body>
+  <ul id="message"></ul>
+  <form id="form" action="">
+    <input id="name" readonly/> 
+    <input id="m" autocomplete="off" placeholder="Type...."/>
+    <button type="submit">Send</button>
+  </form>
+  <!-- <script
+  src="https://code.jquery.com/jquery-3.6.1.js"
+  integrity="sha256-3zlB5s2uwoUzrXK3BT7AX3FyvojsraNFxCc2vC/7pNI="
+  crossorigin="anonymous"></script> -->
+  <script src="https://cdn.socket.io/4.5.3/socket.io.min.js" integrity="sha384-WPFUvHkB1aHA5TDSZi6xtDgkF0wXJcIIxXhC6h8OT8EH3fC5PWro5pWJ1THjcfEi" crossorigin="anonymous"></script>
+  <script>
+    var socket=io();
+    var name=prompt("enter your name");
+    document.getElementById("name").value=name;
+    document.getElementById('form').onsubmit=function(){
+      socket.emit('chat-message',{"msg":document.getElementById('m').value,user:name});
+      document.getElementById('m').value="";
+      return false;
+    };
+    socket.on('chat-message',(msg)=>{
+        var ul = document.getElementById("message");
+        var li = document.createElement("li");
+        li.appendChild(document.createTextNode(msg));
+        ul.appendChild(li);
+      });
+    
+  </script>
+</body>
+</html>
